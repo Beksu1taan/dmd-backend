@@ -6,12 +6,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 💥 ВАЖНО: используем Railway переменные
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT
 });
 
 db.connect(err => {
@@ -22,12 +23,12 @@ db.connect(err => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("API is working 🚀");
+});
+
 app.post("/subscribe", (req, res) => {
   const { name, course, email } = req.body;
-
-  if (!name || !course || !email) {
-    return res.json({ success: false });
-  }
 
   const sql = "INSERT INTO subscribers (name, course, email) VALUES (?, ?, ?)";
 
