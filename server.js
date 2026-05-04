@@ -23,7 +23,13 @@ db.connect(err => {
         course VARCHAR(255),
         email VARCHAR(255)
       )
-    `);
+    `, (err) => {
+      if (err) {
+        console.log("TABLE ERROR:", err);
+      } else {
+        console.log("Table ready");
+      }
+    });
   }
 });
 
