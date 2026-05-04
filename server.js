@@ -7,18 +7,14 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT
+  uri: process.env.MYSQL_URL
 });
 
 db.connect(err => {
   if (err) {
     console.log("DB ERROR:", err);
   } else {
-    console.log("MySQL connected 🚀");
+    console.log("MySQL connected");
 
     db.query(`
       CREATE TABLE IF NOT EXISTS subscribers (
@@ -27,19 +23,14 @@ db.connect(err => {
         course VARCHAR(255),
         email VARCHAR(255)
       )
-    `, (err) => {
-      if (err) {
-        console.log("TABLE ERROR:", err);
-      } else {
-        console.log("Table ready ✅");
-      }
-    });
+    `);
   }
 });
 
 app.get("/", (req, res) => {
-  res.send("API is working 🚀");
+  res.send("API is working");
 });
+
 app.post("/subscribe", (req, res) => {
   const { name, course, email } = req.body;
 
@@ -58,5 +49,5 @@ app.post("/subscribe", (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("Server running 🚀");
+  console.log("Server running");
 });
