@@ -6,20 +6,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 💥 ВАЖНО: используем Railway переменные
-const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT
-});
+// ✅ подключение через MYSQL_URL
+const db = mysql.createConnection(process.env.MYSQL_URL);
 
 db.connect(err => {
   if (err) {
     console.log("DB ERROR:", err);
   } else {
-    console.log("MySQL connected");
+    console.log("MySQL connected 🚀");
   }
 });
 
@@ -34,7 +28,7 @@ app.post("/subscribe", (req, res) => {
 
   db.query(sql, [name, course, email], (err) => {
     if (err) {
-      console.log(err);
+      console.log("SQL ERROR:", err);
       return res.json({ success: false });
     }
 
@@ -45,5 +39,5 @@ app.post("/subscribe", (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log("Server running");
+  console.log("Server running 🚀");
 });
